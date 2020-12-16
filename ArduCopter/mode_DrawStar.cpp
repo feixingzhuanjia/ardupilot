@@ -16,7 +16,7 @@ bool ModeDrawStar::init(bool ignore_checks)
 }
 void ModeDrawStar::generate_path()
 {
-    float radius_cm = 1000.0;
+    float radius_cm = g2.star_radius_cm;
 	//停止点作为第0航点
 	wp_nav->get_wp_stopping_point(path[0]);
 

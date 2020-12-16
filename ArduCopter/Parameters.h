@@ -593,6 +593,8 @@ public:
     void *autotune_ptr;
 #endif
 
+    AP_Float star_radius_cm;
+
 #ifdef ENABLE_SCRIPTING
     AP_Scripting scripting;
 #endif // ENABLE_SCRIPTING
