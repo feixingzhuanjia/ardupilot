@@ -22,8 +22,8 @@ void ModeDrawStar::generate_path()
 
 	path[1] = path[0] + Vector3f(1.0f, 0, 0) * radius_cm;
 	path[2] = path[0] + Vector3f(-cosf(radians(36.0f)),-sinf(radians(36.0f)), 0) * radius_cm;
-	path[3] = path[0] + Vector3f(sinf(radians(36.0f)),cosf(radians(36.0f)), 0) * radius_cm;
-	path[4] = path[0] + Vector3f(sinf(radians(36.0f)),-cosf(radians(36.0f)), 0) * radius_cm;
+	path[3] = path[0] + Vector3f(sinf(radians(36.0f/2)),cosf(radians(36.0f/2)), 0) * radius_cm;
+	path[4] = path[0] + Vector3f(sinf(radians(36.0f/2)),-cosf(radians(36.0f/2)), 0) * radius_cm;
 	path[5] = path[0] + Vector3f(-cosf(radians(36.0f)),sinf(radians(36.0f)), 0) * radius_cm;
 	path[6] = path[1];
 }
