@@ -280,6 +280,9 @@ void Copter::fast_loop()
     if (should_log(MASK_LOG_ANY)) {
         Log_Sensor_Health();
     }
+	gcs().send_text(MAV_SEVERITY_CRITICAL, 
+		            "Current altitude: %.1fm", 
+		            copter.flightmode->get_alt_above_ground_cm()/100.0f);
 }
 
 // rc_loops - reads user input from transmitter/receiver
