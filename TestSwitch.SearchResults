@@ -1,0 +1,30 @@
+---- user_waypoint Matches (17 in 4 files) ----
+Copter.h (arducopter):	Vector3f user_waypoint[20];
+Copter.h (arducopter):	int current_user_waypoint_num;
+Copter.h (arducopter):	void save_user_waypoint();
+Mode_guided.cpp (arducopter):    wp_nav->set_wp_destination(copter.user_waypoint[copter.current_user_waypoint_num-1], false);
+Mode_guided.cpp (arducopter):    copter.current_user_waypoint_num--;
+Mode_guided.cpp (arducopter):    if(copter.current_user_waypoint_num >= 0){
+Mode_guided.cpp (arducopter):			copter.current_user_waypoint_num --;
+Mode_guided.cpp (arducopter):			if(copter.current_user_waypoint_num >= 0)
+Mode_guided.cpp (arducopter):				wp_nav->set_wp_destination(copter.user_waypoint[copter.current_user_waypoint_num}, false);
+RC_Channel.cpp (arducopter):				copter.save_user_waypoint();
+UserCode.cpp (arducopter):void Copter::save_user_waypoint()
+UserCode.cpp (arducopter):     if(copter.current_user_waypoint_num < 20){ 
+UserCode.cpp (arducopter):     	user_waypoint[current_user_waypoint_num] = inertial_nav.get_position();
+UserCode.cpp (arducopter):     	copter.current_user_waypoint_num ++;
+---- user_waypoint Matches (17 in 4 files) ----
+Copter.h (arducopter):	Vector3f user_waypoint[20];
+Copter.h (arducopter):	int current_user_waypoint_num;
+Copter.h (arducopter):	void save_user_waypoint();
+Mode_guided.cpp (arducopter):    wp_nav->set_wp_destination(copter.user_waypoint[copter.current_user_waypoint_num-1], false);
+Mode_guided.cpp (arducopter):    copter.current_user_waypoint_num--;
+Mode_guided.cpp (arducopter):    if(copter.current_user_waypoint_num >= 0){
+Mode_guided.cpp (arducopter):			copter.current_user_waypoint_num --;
+Mode_guided.cpp (arducopter):			if(copter.current_user_waypoint_num >= 0)
+Mode_guided.cpp (arducopter):				wp_nav->set_wp_destination(copter.user_waypoint[copter.current_user_waypoint_num}, false);
+RC_Channel.cpp (arducopter):				copter.save_user_waypoint();
+UserCode.cpp (arducopter):void Copter::save_user_waypoint()
+UserCode.cpp (arducopter):     if(copter.current_user_waypoint_num < 20){ 
+UserCode.cpp (arducopter):     	user_waypoint[current_user_waypoint_num] = inertial_nav.get_position();
+UserCode.cpp (arducopter):     	copter.current_user_waypoint_num ++;

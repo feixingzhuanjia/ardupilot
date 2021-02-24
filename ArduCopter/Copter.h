@@ -913,6 +913,10 @@ private:
     void userhook_auxSwitch2(uint8_t ch_flag);
     void userhook_auxSwitch3(uint8_t ch_flag);
 
+    Vector3f user_waypoint[20];
+	int current_user_waypoint_num;
+	void save_user_waypoint();
+	
 #if OSD_ENABLED == ENABLED
     void publish_osd_info();
 #endif
