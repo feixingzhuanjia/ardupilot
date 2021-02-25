@@ -28,3 +28,59 @@ UserCode.cpp (arducopter):void Copter::save_user_waypoint()
 UserCode.cpp (arducopter):     if(copter.current_user_waypoint_num < 20){ 
 UserCode.cpp (arducopter):     	user_waypoint[current_user_waypoint_num] = inertial_nav.get_position();
 UserCode.cpp (arducopter):     	copter.current_user_waypoint_num ++;
+---- reached_wp_destination Matches (29 in 9 files) ----
+Mode_auto.cpp (arducopter):    return ((_mode == Auto_TakeOff) && !wp_nav->reached_wp_destination());
+Mode_auto.cpp (arducopter):        loiter_to_alt.reached_destination_xy = wp_nav->reached_wp_destination_xy();
+Mode_auto.cpp (arducopter):    const bool reached_wp_dest = copter.wp_nav->reached_wp_destination();
+Mode_auto.cpp (arducopter):            if (copter.wp_nav->reached_wp_destination()) {
+Mode_auto.cpp (arducopter):        if (!copter.wp_nav->reached_wp_destination()) {
+Mode_auto.cpp (arducopter):        if (!copter.wp_nav->reached_wp_destination()) {
+Mode_auto.cpp (arducopter):    if (!copter.wp_nav->reached_wp_destination()) {
+Mode_auto.cpp (arducopter):    if ( !copter.wp_nav->reached_wp_destination() ) {
+Mode_auto.cpp (arducopter):        if (copter.wp_nav->reached_wp_destination()) {
+Mode_auto.cpp (arducopter):    if ( !copter.wp_nav->reached_wp_destination() ) {
+Mode_guided.cpp (arducopter):    if (wp_nav->reached_wp_destination()) {
+Mode_guided.cpp (arducopter):		if(wp_nav->reached_wp_destination()){
+Mode_rtl.cpp (arducopter):    _state_complete = wp_nav->reached_wp_destination();
+Mode_smart_rtl.cpp (arducopter):    if (wp_nav->reached_wp_destination()) {
+Mode_smart_rtl.cpp (arducopter):    if (wp_nav->reached_wp_destination()) {
+Mode_zigzag.cpp (arducopter):    if (!wp_nav->reached_wp_destination()) {
+Commands_logic.cpp (ardusub):    if (!wp_nav.reached_wp_destination()) {
+Commands_logic.cpp (ardusub):            if (wp_nav.reached_wp_destination()) {
+Commands_logic.cpp (ardusub):            if (wp_nav.reached_wp_destination()) {
+Commands_logic.cpp (ardusub):    return wp_nav.reached_wp_destination();
+Commands_logic.cpp (ardusub):    if (!wp_nav.reached_wp_destination()) {
+Commands_logic.cpp (ardusub):        if (wp_nav.reached_wp_destination()) {
+Commands_logic.cpp (ardusub):    if (!wp_nav.reached_wp_destination()) {
+AC_WPNav.h (e:\ardupilot\libraries\ac_wpnav):    virtual bool reached_wp_destination() const { return _flags.reached_destination; }
+AC_WPNav.h (e:\ardupilot\libraries\ac_wpnav):    // reached_wp_destination_xy - true if within RADIUS_CM of waypoint in x/y
+AC_WPNav.h (e:\ardupilot\libraries\ac_wpnav):    bool reached_wp_destination_xy() const {
+AC_WPNav_OA.cpp (e:\ardupilot\libraries\ac_wpnav):bool AC_WPNav_OA::reached_wp_destination() const
+AC_WPNav_OA.cpp (e:\ardupilot\libraries\ac_wpnav):    return (_oa_state == AP_OAPathPlanner::OA_NOT_REQUIRED) && AC_WPNav::reached_wp_destination();
+AC_WPNav_OA.h (e:\ardupilot\libraries\ac_wpnav):    bool reached_wp_destination() const override;
+---- stopping_point Matches (132 in 21 files) ----
+AC_AttitudeControl.cpp (e:\ardupilot\libraries\ac_attitudecontrol):float AC_AttitudeControl::stopping_point(float first_ord_mag, float p, float second_ord_lim)
+AC_AttitudeControl.h (e:\ardupilot\libraries\ac_attitudecontrol):    static float stopping_point(float first_ord_mag, float p, float second_ord_lim);
+
+AC_Avoid.cpp (e:\ardupilot\libraries\ac_avoidance):        const Vector2f stopping_point = position_xy + desired_vel_cms*(get_stopping_distance(kP, accel_cmss, desired_speed)/desired_speed);
+
+AC_Avoid.cpp (e:\ardupilot\libraries\ac_avoidance):                    const Vector2f stopping_point = position_NE_rel + stopping_offset;
+AC_Circle.cpp (e:\ardupilot\libraries\ac_wpnav):    const Vector3f& stopping_point = _pos_control.get_pos_target();    
+---- get_wp_stopping_point Matches (13 in 7 files) ----
+Mode_auto.cpp (arducopter):    wp_nav->get_wp_stopping_point(stopping_point);
+Mode_auto.cpp (arducopter):        copter.wp_nav->get_wp_stopping_point_xy(temp_pos);
+Mode_guided.cpp (arducopter):    wp_nav->get_wp_stopping_point(stopping_point);
+Commands_logic.cpp (ardusub):        wp_nav.get_wp_stopping_point_xy(temp_pos);
+Control_guided.cpp (ardusub):    wp_nav.get_wp_stopping_point_xy(stopping_point);
+AC_WPNav.cpp (e:\ardupilot\libraries\ac_wpnav):/// get_wp_stopping_point_xy - returns vector to stopping point based on a horizontal position and velocity
+AC_WPNav.cpp (e:\ardupilot\libraries\ac_wpnav):void AC_WPNav::get_wp_stopping_point_xy(Vector3f& stopping_point) const
+AC_WPNav.cpp (e:\ardupilot\libraries\ac_wpnav):/// get_wp_stopping_point - returns vector to stopping point based on 3D position and velocity
+AC_WPNav.cpp (e:\ardupilot\libraries\ac_wpnav):void AC_WPNav::get_wp_stopping_point(Vector3f& stopping_point) const
+AC_WPNav.h (e:\ardupilot\libraries\ac_wpnav):    /// get_wp_stopping_point_xy - calculates stopping point based on current position, velocity, waypoint acceleration
+AC_WPNav.h (e:\ardupilot\libraries\ac_wpnav):    void get_wp_stopping_point_xy(Vector3f& stopping_point) const;
+AC_WPNav.h (e:\ardupilot\libraries\ac_wpnav):    void get_wp_stopping_point(Vector3f& stopping_point) const;
+AC_WPNav_OA.cpp (e:\ardupilot\libraries\ac_wpnav):                get_wp_stopping_point(stopping_point);
+---- stopping_point Matches (4 in 1 files) ----
+Mode_guided.cpp (arducopter):Vector3f stopping_point;
+Mode_guided.cpp (arducopter):    wp_nav->get_wp_stopping_point(stopping_point);
+Mode_guided.cpp (arducopter):    			wp_nav->set_wp_destination(stopping_point, false);

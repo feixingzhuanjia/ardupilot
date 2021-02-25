@@ -18,6 +18,7 @@ static Vector3f guided_vel_target_cms;      // velocity target (used by velocity
 static uint32_t posvel_update_time_ms;      // system time of last target update to posvel controller (i.e. position and velocity update)
 static uint32_t vel_update_time_ms;         // system time of last target update to velocity controller
 
+
 struct {
     uint32_t update_time_ms;
     float roll_cd;
@@ -425,6 +426,7 @@ void ModeGuided::pos_control_run()
 			copter.current_user_waypoint_num --;
 			if(copter.current_user_waypoint_num >= 0)
 				wp_nav->set_wp_destination(copter.user_waypoint[copter.current_user_waypoint_num], false);
+			
     	}
     }
 
