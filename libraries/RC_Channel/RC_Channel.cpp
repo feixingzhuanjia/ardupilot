@@ -501,10 +501,10 @@ bool RC_Channel::read_aux()
     if (!read_3pos_switch(new_position)) {
         return false;
     }
-
+    /*°´¼ü Ïû¶¶
     if (!debounce_completed(new_position)) {
         return false;
-    }
+    }*/
 
     // debounced; undertake the action:
     do_aux_function(_option, new_position);
@@ -603,20 +603,7 @@ void RC_Channel::do_aux_function_gripper(const aux_switch_pos_t ch_flag)
     if (gripper == nullptr) {
         return;
     }
-
-    switch(ch_flag) {
-    case LOW:
-        gripper->release();
-//        copter.Log_Write_Event(DATA_GRIPPER_RELEASE);
-        break;
-    case MIDDLE:
-        // nothing
-        break;
-    case HIGH:
-        gripper->grab();
-//        copter.Log_Write_Event(DATA_GRIPPER_GRAB);
-        break;
-    }
+    gripper->grab(); 
 }
 
 void RC_Channel::do_aux_function_lost_vehicle_sound(const aux_switch_pos_t ch_flag)
@@ -849,7 +836,7 @@ void RC_Channel::init_aux()
 // read_3pos_switch
 bool RC_Channel::read_3pos_switch(RC_Channel::aux_switch_pos_t &ret) const
 {
-    const uint16_t in = get_radio_in();
+    const uint16_t in = steer_pwm;
     if (in <= 900 or in >= 2200) {
         return false;
     }

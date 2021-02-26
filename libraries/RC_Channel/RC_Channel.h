@@ -178,6 +178,7 @@ public:
         KILL_IMU1 =          100, // disable first IMU (for IMU failure testing)
         KILL_IMU2 =          101, // disable second IMU (for IMU failure testing)
         CAM_MODE_TOGGLE =    102, // Momentary switch to cycle camera modes
+        STEERING_TEXT =      103, // text steering function
         // if you add something here, make sure to update the documentation of the parameter in RC_Channel.cpp!
         // also, if you add an option >255, you will need to fix duplicate_options_exist
 
@@ -229,13 +230,16 @@ private:
 
     AP_Int8     reversed;
     AP_Int16    dead_zone;
-
+    
     ChannelType type_in;
     int16_t     high_in;
 
     // the input channel this corresponds to
     uint8_t     ch_in;
 
+	// steer pwm change
+    uint16_t     steer_pwm = 1300;
+	
     // overrides
     uint16_t override_value;
     uint32_t last_override_time;

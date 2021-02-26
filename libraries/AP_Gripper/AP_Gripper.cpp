@@ -17,14 +17,14 @@ const AP_Param::GroupInfo AP_Gripper::var_info[] = {
     // @Description: Gripper enable/disable
     // @User: Standard
     // @Values: 0:Disabled, 1:Enabled
-    AP_GROUPINFO_FLAGS("ENABLE", 0, AP_Gripper, _enabled, 0, AP_PARAM_FLAG_ENABLE),
+    AP_GROUPINFO_FLAGS("ENABLE", 0, AP_Gripper, _enabled, 1, AP_PARAM_FLAG_ENABLE),
 
     // @Param: TYPE
     // @DisplayName: Gripper Type
     // @Description: Gripper enable/disable
     // @User: Standard
     // @Values: 0:None,1:Servo,2:EPM
-    AP_GROUPINFO("TYPE", 1, AP_Gripper, config.type, 0),
+    AP_GROUPINFO("TYPE", 1, AP_Gripper, config.type, 1),
 
     // @Param: GRAB
     // @DisplayName: Gripper Grab PWM

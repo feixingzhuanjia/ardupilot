@@ -1,51 +1,24 @@
----- read_mode_switch Matches (8 in 5 files) ----
-Rover.cpp (apmrover2):    SCHED_TASK_CLASS(RC_Channels,         (RC_Channels*)&rover.g2.rc_channels, read_mode_switch,        7,    200),
-Copter.cpp (arducopter):    rc().read_mode_switch();
-RC_Channel.cpp (e:\ardupilot\libraries\rc_channel):    read_mode_switch();
-RC_Channel.cpp (e:\ardupilot\libraries\rc_channel):void RC_Channel::read_mode_switch()
-RC_Channel.h (e:\ardupilot\libraries\rc_channel):    void read_mode_switch();
-RC_Channel.h (e:\ardupilot\libraries\rc_channel):    virtual void read_mode_switch();
-RC_Channels.cpp (e:\ardupilot\libraries\rc_channel):void RC_Channels::read_mode_switch()
-RC_Channels.cpp (e:\ardupilot\libraries\rc_channel):    c->read_mode_switch();
----- mode_switch_changed Matches (6 in 6 files) ----
-RC_Channel.cpp (apmrover2):void RC_Channel_Rover::mode_switch_changed(modeswitch_pos_t new_pos)
-RC_Channel.h (apmrover2):    void mode_switch_changed(modeswitch_pos_t new_pos) override;
-RC_Channel.cpp (arducopter):void RC_Channel_Copter::mode_switch_changed(modeswitch_pos_t new_pos)
-RC_Channel.h (arducopter):    void mode_switch_changed(modeswitch_pos_t new_pos) override;
-RC_Channel.cpp (e:\ardupilot\libraries\rc_channel):    mode_switch_changed(position);
-RC_Channel.h (e:\ardupilot\libraries\rc_channel):    virtual void mode_switch_changed(modeswitch_pos_t new_pos) {
----- set_radio_passthrough Matches (1 in 1 files) ----
-Radio.cpp (arducopter):    motors->set_radio_passthrough(channel_roll->norm_input(),
----- set_radio_passthrough Matches (3 in 3 files) ----
-Radio.cpp (arducopter):    motors->set_radio_passthrough(channel_roll->norm_input(),
-AP_Motors_Class.cpp (e:\ardupilot\libraries\ap_motors):void AP_Motors::set_radio_passthrough(float roll_input, float pitch_input, float throttle_input, float yaw_input)
-AP_Motors_Class.h (e:\ardupilot\libraries\ap_motors):    void                set_radio_passthrough(float roll_input, float pitch_input, float throttle_input, float yaw_input);
----- _roll_radio_passthrough Matches (7 in 5 files) ----
-AP_MotorsCoax.cpp (e:\ardupilot\libraries\ap_motors):            rc_write_angle(AP_MOTORS_MOT_1, _roll_radio_passthrough * AP_MOTORS_COAX_SERVO_INPUT_RANGE);
-AP_MotorsCoax.cpp (e:\ardupilot\libraries\ap_motors):            rc_write_angle(AP_MOTORS_MOT_3, -_roll_radio_passthrough * AP_MOTORS_COAX_SERVO_INPUT_RANGE);
-AP_MotorsHeli.cpp (e:\ardupilot\libraries\ap_motors):                _roll_in = _roll_radio_passthrough;
-AP_MotorsSingle.cpp (e:\ardupilot\libraries\ap_motors):            rc_write_angle(AP_MOTORS_MOT_1, _roll_radio_passthrough * AP_MOTORS_SINGLE_SERVO_INPUT_RANGE);
-AP_MotorsSingle.cpp (e:\ardupilot\libraries\ap_motors):            rc_write_angle(AP_MOTORS_MOT_3, -_roll_radio_passthrough * AP_MOTORS_SINGLE_SERVO_INPUT_RANGE);
-AP_Motors_Class.cpp (e:\ardupilot\libraries\ap_motors):    _roll_radio_passthrough = roll_input;
-AP_Motors_Class.h (e:\ardupilot\libraries\ap_motors):    float _roll_radio_passthrough;     // roll input from pilot in -1 ~ +1 range.  used for setup and providing servo feedback while landed
----- rc_write_angle Matches (20 in 6 files) ----
-AP_MotorsCoax.cpp (e:\ardupilot\libraries\ap_motors):            rc_write_angle(AP_MOTORS_MOT_1, _roll_radio_passthrough * AP_MOTORS_COAX_SERVO_INPUT_RANGE);
-AP_MotorsCoax.cpp (e:\ardupilot\libraries\ap_motors):            rc_write_angle(AP_MOTORS_MOT_2, _pitch_radio_passthrough * AP_MOTORS_COAX_SERVO_INPUT_RANGE);
-AP_MotorsCoax.cpp (e:\ardupilot\libraries\ap_motors):            rc_write_angle(AP_MOTORS_MOT_3, -_roll_radio_passthrough * AP_MOTORS_COAX_SERVO_INPUT_RANGE);
-AP_MotorsCoax.cpp (e:\ardupilot\libraries\ap_motors):            rc_write_angle(AP_MOTORS_MOT_4, -_pitch_radio_passthrough * AP_MOTORS_COAX_SERVO_INPUT_RANGE);
-AP_MotorsCoax.cpp (e:\ardupilot\libraries\ap_motors):                rc_write_angle(AP_MOTORS_MOT_1 + i, _spin_up_ratio * _actuator_out[i] * AP_MOTORS_COAX_SERVO_INPUT_RANGE);
-AP_MotorsCoax.cpp (e:\ardupilot\libraries\ap_motors):                rc_write_angle(AP_MOTORS_MOT_1 + i, _actuator_out[i] * AP_MOTORS_COAX_SERVO_INPUT_RANGE);
-AP_MotorsHeli_Quad.cpp (e:\ardupilot\libraries\ap_motors):        rc_write_angle(AP_MOTORS_MOT_1+i, _out[i] * QUAD_SERVO_MAX_ANGLE);
-AP_MotorsHeli_Single.cpp (e:\ardupilot\libraries\ap_motors):        rc_write_angle(AP_MOTORS_MOT_4, _servo4_out * YAW_SERVO_MAX_ANGLE);
-AP_MotorsHeli_Single.cpp (e:\ardupilot\libraries\ap_motors):                rc_write_angle(AP_MOTORS_MOT_4, -YAW_SERVO_MAX_ANGLE);
-AP_MotorsHeli_Single.cpp (e:\ardupilot\libraries\ap_motors):                rc_write_angle(AP_MOTORS_MOT_4, -YAW_SERVO_MAX_ANGLE);
-AP_MotorsHeli_Single.cpp (e:\ardupilot\libraries\ap_motors):                rc_write_angle(AP_MOTORS_MOT_4, _servo4_out * YAW_SERVO_MAX_ANGLE);
-AP_MotorsHeli_Single.cpp (e:\ardupilot\libraries\ap_motors):                rc_write_angle(AP_MOTORS_MOT_4, -YAW_SERVO_MAX_ANGLE);
-AP_MotorsSingle.cpp (e:\ardupilot\libraries\ap_motors):            rc_write_angle(AP_MOTORS_MOT_1, _roll_radio_passthrough * AP_MOTORS_SINGLE_SERVO_INPUT_RANGE);
-AP_MotorsSingle.cpp (e:\ardupilot\libraries\ap_motors):            rc_write_angle(AP_MOTORS_MOT_2, _pitch_radio_passthrough * AP_MOTORS_SINGLE_SERVO_INPUT_RANGE);
-AP_MotorsSingle.cpp (e:\ardupilot\libraries\ap_motors):            rc_write_angle(AP_MOTORS_MOT_3, -_roll_radio_passthrough * AP_MOTORS_SINGLE_SERVO_INPUT_RANGE);
-AP_MotorsSingle.cpp (e:\ardupilot\libraries\ap_motors):            rc_write_angle(AP_MOTORS_MOT_4, -_pitch_radio_passthrough * AP_MOTORS_SINGLE_SERVO_INPUT_RANGE);
-AP_MotorsSingle.cpp (e:\ardupilot\libraries\ap_motors):                rc_write_angle(AP_MOTORS_MOT_1 + i, _spin_up_ratio * _actuator_out[i] * AP_MOTORS_SINGLE_SERVO_INPUT_RANGE);
-AP_MotorsSingle.cpp (e:\ardupilot\libraries\ap_motors):                rc_write_angle(AP_MOTORS_MOT_1 + i, _actuator_out[i] * AP_MOTORS_SINGLE_SERVO_INPUT_RANGE);
-AP_Motors_Class.cpp (e:\ardupilot\libraries\ap_motors):void AP_Motors::rc_write_angle(uint8_t chan, int16_t angle_cd)
-AP_Motors_Class.h (e:\ardupilot\libraries\ap_motors):    virtual void        rc_write_angle(uint8_t chan, int16_t angle_cd);
+---- do_aux_function Matches (98 in 8 files) ----
+
+
+RC_Channel.cpp (e:\ardupilot\libraries\rc_channel):    do_aux_function(_option, new_position);
+
+RC_Channel.cpp (e:\ardupilot\libraries\rc_channel):void RC_Channel::do_aux_function(const aux_func_t ch_option, const aux_switch_pos_t ch_flag)
+
+RC_Channel.h (e:\ardupilot\libraries\rc_channel):    virtual void do_aux_function(aux_func_t ch_option, aux_switch_pos_t);
+
+---- read_aux Matches (6 in 3 files) ----
+RC_Channel.cpp (e:\ardupilot\libraries\rc_channel):bool RC_Channel::read_aux()
+RC_Channel.h (e:\ardupilot\libraries\rc_channel):    bool read_aux();
+RC_Channel.h (e:\ardupilot\libraries\rc_channel):    void read_aux_all();
+RC_Channels.cpp (e:\ardupilot\libraries\rc_channel):// read_aux_switches - checks aux switch positions and invokes configured actions
+RC_Channels.cpp (e:\ardupilot\libraries\rc_channel):void RC_Channels::read_aux_all()
+RC_Channels.cpp (e:\ardupilot\libraries\rc_channel):        need_log |= c->read_aux();
+---- read_aux_all Matches (5 in 5 files) ----
+Rover.cpp (apmrover2):    SCHED_TASK_CLASS(RC_Channels,         (RC_Channels*)&rover.g2.rc_channels, read_aux_all,           10,    200),
+Copter.cpp (arducopter):    SCHED_TASK_CLASS(RC_Channels,          (RC_Channels*)&copter.g2.rc_channels,      read_aux_all,    10,     50),
+ArduPlane.cpp (arduplane):    SCHED_TASK_CLASS(RC_Channels,       (RC_Channels*)&plane.g2.rc_channels, read_aux_all,           10,    200),
+RC_Channel.h (e:\ardupilot\libraries\rc_channel):    void read_aux_all();
+RC_Channels.cpp (e:\ardupilot\libraries\rc_channel):void RC_Channels::read_aux_all()
+---- WARN_IF_UNUSED Matches (1 in 1 files) ----
+RC_Channel.h (e:\ardupilot\libraries\rc_channel):    bool read_3pos_switch(aux_switch_pos_t &ret) const WARN_IF_UNUSED;
