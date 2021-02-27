@@ -230,15 +230,12 @@ private:
 
     AP_Int8     reversed;
     AP_Int16    dead_zone;
-    
+    AP_Int16    steer_pwm;
     ChannelType type_in;
     int16_t     high_in;
 
     // the input channel this corresponds to
     uint8_t     ch_in;
-
-	// steer pwm change
-    uint16_t     steer_pwm = 1300;
 	
     // overrides
     uint16_t override_value;
@@ -248,9 +245,9 @@ private:
     int16_t pwm_to_angle_dz(uint16_t dead_zone) const;
 
     // pwm value above which the option will be invoked:
-    static const uint16_t AUX_PWM_TRIGGER_HIGH = 1800;
+    static const uint16_t AUX_PWM_TRIGGER_HIGH = 1650;
     // pwm value below which the option will be disabled:
-    static const uint16_t AUX_PWM_TRIGGER_LOW = 1200;
+    static const uint16_t AUX_PWM_TRIGGER_LOW = 1350;
     bool read_3pos_switch(aux_switch_pos_t &ret) const WARN_IF_UNUSED;
 
     // Structure used to detect and debounce switch changes

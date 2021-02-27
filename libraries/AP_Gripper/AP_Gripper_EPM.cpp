@@ -94,6 +94,14 @@ void AP_Gripper_EPM::neutral()
     }
 }
 
+void AP_Gripper_EPM::neutral_servo()
+{
+    if (!should_use_uavcan()) {
+        // move the servo to the off position
+        SRV_Channels::set_output_pwm(SRV_Channel::k_gripper, config.neutral_pwm);
+    }
+}
+
 // update - moves the pwm back to neutral after the timeout has passed
 // should be called at at least 10hz
 void AP_Gripper_EPM::update_gripper()

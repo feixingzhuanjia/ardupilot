@@ -38,6 +38,9 @@ public:
     // grab - move the servo to the grab position
     void grab();
 
+	// Neutral - move the servo to the Neutral position
+    void neutral_servo();
+
     // release - move the servo output to the release position
     void release();
 

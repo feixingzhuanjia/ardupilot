@@ -1,24 +1,2 @@
----- do_aux_function Matches (98 in 8 files) ----
-
-
-RC_Channel.cpp (e:\ardupilot\libraries\rc_channel):    do_aux_function(_option, new_position);
-
-RC_Channel.cpp (e:\ardupilot\libraries\rc_channel):void RC_Channel::do_aux_function(const aux_func_t ch_option, const aux_switch_pos_t ch_flag)
-
-RC_Channel.h (e:\ardupilot\libraries\rc_channel):    virtual void do_aux_function(aux_func_t ch_option, aux_switch_pos_t);
-
----- read_aux Matches (6 in 3 files) ----
-RC_Channel.cpp (e:\ardupilot\libraries\rc_channel):bool RC_Channel::read_aux()
-RC_Channel.h (e:\ardupilot\libraries\rc_channel):    bool read_aux();
-RC_Channel.h (e:\ardupilot\libraries\rc_channel):    void read_aux_all();
-RC_Channels.cpp (e:\ardupilot\libraries\rc_channel):// read_aux_switches - checks aux switch positions and invokes configured actions
-RC_Channels.cpp (e:\ardupilot\libraries\rc_channel):void RC_Channels::read_aux_all()
-RC_Channels.cpp (e:\ardupilot\libraries\rc_channel):        need_log |= c->read_aux();
----- read_aux_all Matches (5 in 5 files) ----
-Rover.cpp (apmrover2):    SCHED_TASK_CLASS(RC_Channels,         (RC_Channels*)&rover.g2.rc_channels, read_aux_all,           10,    200),
-Copter.cpp (arducopter):    SCHED_TASK_CLASS(RC_Channels,          (RC_Channels*)&copter.g2.rc_channels,      read_aux_all,    10,     50),
-ArduPlane.cpp (arduplane):    SCHED_TASK_CLASS(RC_Channels,       (RC_Channels*)&plane.g2.rc_channels, read_aux_all,           10,    200),
-RC_Channel.h (e:\ardupilot\libraries\rc_channel):    void read_aux_all();
-RC_Channels.cpp (e:\ardupilot\libraries\rc_channel):void RC_Channels::read_aux_all()
----- WARN_IF_UNUSED Matches (1 in 1 files) ----
-RC_Channel.h (e:\ardupilot\libraries\rc_channel):    bool read_3pos_switch(aux_switch_pos_t &ret) const WARN_IF_UNUSED;
+---- gripper->neutral Matches (1 in 1 files) ----
+RC_Channel.cpp (e:\ardupilot\libraries\rc_channel):		gripper->neutral_servo();

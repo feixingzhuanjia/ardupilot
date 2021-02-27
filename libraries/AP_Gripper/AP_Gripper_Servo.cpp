@@ -24,6 +24,18 @@ void AP_Gripper_Servo::grab()
     gcs().send_text(MAV_SEVERITY_INFO, "Gripper load grabbing");
 }
 
+void AP_Gripper_Servo::neutral_servo()
+{
+    // move the servo to the neutral position
+    SRV_Channels::set_output_pwm(SRV_Channel::k_gripper, config.neutral_pwm);
+    action_timestamp = AP_HAL::millis();
+#if CONFIG_HAL_BOARD == HAL_BOARD_SITL
+    is_releasing = false;
+    is_released = true;
+#endif
+    gcs().send_text(MAV_SEVERITY_INFO, "Gripper load neutral");
+}
+
 void AP_Gripper_Servo::release()
 {
     // move the servo to the release position

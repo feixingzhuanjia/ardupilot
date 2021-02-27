@@ -26,6 +26,8 @@ extern const AP_HAL::HAL& hal;
 #include <AP_Math/AP_Math.h>
 
 #include "RC_Channel.h"
+class Parameters;
+class ParametersG2;
 
 #include <GCS_MAVLink/GCS.h>
 
@@ -92,6 +94,8 @@ const AP_Param::GroupInfo RC_Channel::var_info[] = {
     // @Values{Plane}: 0:Do Nothing, 4:ModeRTL, 9:Camera Trigger, 16:ModeAuto, 24:Auto Mission Reset, 28:Relay On/Off, 29:Landing Gear, 34:Relay2 On/Off, 30:Lost Plane Sound, 31:Motor Emergency Stop, 35:Relay3 On/Off, 36:Relay4 On/Off, 41:ArmDisarm, 43:InvertedFlight, 46:RC Override Enable, 51:ModeManual, 55:ModeGuided, 58:Clear Waypoints, 62:Compass Learn, 64:Reverse Throttle, 65:GPS Disable, 66:Relay5, 67:Relay6, 72:ModeCircle, 77:ModeTakeoff, 100:KillIMU1, 101:KillIMU2, 102:Camera Mode Toggle
     // @User: Standard
     AP_GROUPINFO_FRAME("OPTION",  6, RC_Channel, option, 0, AP_PARAM_FRAME_COPTER|AP_PARAM_FRAME_ROVER|AP_PARAM_FRAME_PLANE),
+
+	AP_GROUPINFO("STEER_PWM", 7, RC_Channel, steer_pwm, 1300),
 
     AP_GROUPEND
 };
@@ -603,7 +607,17 @@ void RC_Channel::do_aux_function_gripper(const aux_switch_pos_t ch_flag)
     if (gripper == nullptr) {
         return;
     }
-    gripper->grab(); 
+	switch (ch_flag) {
+    case HIGH: 
+		gripper->grab();
+	    break;
+	case MIDDLE:
+		gripper->neutral_servo();
+		break;
+	case LOW: 
+		gripper->release();
+		break;
+	}
 }
 
 void RC_Channel::do_aux_function_lost_vehicle_sound(const aux_switch_pos_t ch_flag)

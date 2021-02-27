@@ -31,6 +31,9 @@ public:
 
     // grab - move the EPM pwm output to the grab position
     void        grab() override;
+	
+	// neutral - move the servo to the neutral position
+    void        neutral_servo() override;
 
     // release - move the EPM pwm output to the release position
     void        release() override;

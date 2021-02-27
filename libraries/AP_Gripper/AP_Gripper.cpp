@@ -128,6 +128,7 @@ void AP_Gripper::init()
 
 PASS_TO_BACKEND(grab)
 PASS_TO_BACKEND(release)
+PASS_TO_BACKEND(neutral_servo)
 PASS_TO_BACKEND(update)
 
 #undef PASS_TO_BACKEND

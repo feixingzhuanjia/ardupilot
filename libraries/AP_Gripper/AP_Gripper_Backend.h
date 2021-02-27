@@ -31,6 +31,9 @@ public:
     // grab - move the servo to the grab position
     virtual void grab() = 0;
 
+	// Neutral - move the servo to the Neutral position
+    virtual void neutral_servo() = 0;
+
     // release - move the servo output to the release position
     virtual void release() = 0;
 
