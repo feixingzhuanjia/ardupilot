@@ -14,10 +14,10 @@ bool ModeLoiter::init(bool ignore_checks)
         // apply SIMPLE mode transform to pilot inputs
         update_simple_mode();
 
-        // convert pilot input to lean angles
+        // convert pilot input to lean angles将导向输入转换为倾斜角度 
         get_pilot_desired_lean_angles(target_roll, target_pitch, loiter_nav->get_angle_max_cd(), attitude_control->get_althold_lean_angle_max());
 
-        // process pilot's roll and pitch input
+        // process pilot's roll and pitch input处理飞行员的横滚和俯仰输入 
         loiter_nav->set_pilot_desired_acceleration(target_roll, target_pitch, G_Dt);
     } else {
         // clear out pilot desired acceleration in case radio failsafe event occurs and we do not switch to RTL for some reason

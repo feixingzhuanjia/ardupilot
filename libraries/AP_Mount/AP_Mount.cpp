@@ -73,7 +73,7 @@ const AP_Param::GroupInfo AP_Mount::var_info[] = {
     // @Description: enable roll stabilisation relative to Earth
     // @Values: 0:Disabled,1:Enabled
     // @User: Standard
-    AP_GROUPINFO("_STAB_ROLL",  4, AP_Mount, state[0]._stab_roll, 0),
+    AP_GROUPINFO("_STAB_ROLL",  4, AP_Mount, state[0]._stab_roll, 1),
 
     // @Param: _STAB_TILT
     // @DisplayName: Stabilize mount's pitch/tilt angle
@@ -94,7 +94,7 @@ const AP_Param::GroupInfo AP_Mount::var_info[] = {
     // @Description: 0 for none, any other for the RC channel to be used to control roll movements
     // @Values: 0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8,9:RC9,10:RC10,11:RC11,12:RC12
     // @User: Standard
-    AP_GROUPINFO("_RC_IN_ROLL",  7, AP_Mount, state[0]._roll_rc_in, 0),
+    AP_GROUPINFO("_RC_IN_ROLL",  7, AP_Mount, state[0]._roll_rc_in, 12),
 
     // @Param: _ANGMIN_ROL
     // @DisplayName: Minimum roll angle
@@ -193,10 +193,10 @@ const AP_Param::GroupInfo AP_Mount::var_info[] = {
     // @Param: _TYPE
     // @DisplayName: Mount Type
     // @Description: Mount Type (None, Servo or MAVLink)
-    // @Values: 0:None, 1:Servo, 2:3DR Solo, 3:Alexmos Serial, 4:SToRM32 MAVLink, 5:SToRM32 Serial
+    // @Values: 0:None, 1:Servo, 2:3DR Solo, 3:Alexmos Serial, 4:SToRM32 MAVLink, 5:SToRM32 Serial, 6:Auto Servo
     // @RebootRequired: True
     // @User: Standard
-    AP_GROUPINFO("_TYPE", 19, AP_Mount, state[0]._type, 0),
+    AP_GROUPINFO("_TYPE", 19, AP_Mount, state[0]._type, 6),
 
     // 20 formerly _OFF_JNT
 

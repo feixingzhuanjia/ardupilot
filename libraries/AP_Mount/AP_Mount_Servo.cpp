@@ -37,7 +37,8 @@ void AP_Mount_Servo::update()
 
     switch(get_mode()) {
         // move mount to a "retracted position" or to a position where a fourth servo can retract the entire mount into the fuselage
-        case MAV_MOUNT_MODE_RETRACT:
+        //将支架移动到“缩回位置”或第四个伺服可以将整个支架缩回机身的位置 
+		case MAV_MOUNT_MODE_RETRACT:
         {
             _angle_bf_output_deg = _state._retract_angles.get();
             break;
