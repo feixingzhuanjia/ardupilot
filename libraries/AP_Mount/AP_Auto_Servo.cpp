@@ -1,21 +1,20 @@
 #include "AP_Auto_Servo.h"
 #include <AP_GPS/AP_GPS.h>
-#include <GCS_MAVLink/GCS.h>
 
 extern const AP_HAL::HAL& hal;
 
 // init - performs any required initialisation for this instance
-void AP_Auto_Servo::init()
+void AP_Mount_Auto_Servo::init()
 {
     if (_instance == 0) {
         _roll_idx = SRV_Channel::k_mount_roll;
-		  _tilt_idx = SRV_Channel::k_mount_tilt;
+	    _tilt_idx = SRV_Channel::k_mount_tilt;
         _pan_idx  = SRV_Channel::k_mount_pan;
         _open_idx = SRV_Channel::k_mount_open;
     } else {
         // this must be the 2nd mount
         _roll_idx = SRV_Channel::k_mount2_roll;
-		  _tilt_idx = SRV_Channel::k_mount_tilt;
+	    _tilt_idx = SRV_Channel::k_mount_tilt;
         _pan_idx  = SRV_Channel::k_mount_pan;
         _open_idx = SRV_Channel::k_mount2_open;
     }
@@ -25,7 +24,7 @@ void AP_Auto_Servo::init()
 }
 
 // update mount position - should be called periodically
-void AP_Auto_Servo::update()
+void AP_Mount_Auto_Servo::update()
 {
     
     // check servo map every three seconds to allow users to modify parameters
@@ -44,29 +43,27 @@ void AP_Auto_Servo::update()
     move_servo(_tilt_idx, _angle_bf_output_deg.y*10, _state._tilt_angle_min*0.1f, _state._tilt_angle_max*0.1f);
     move_servo(_pan_idx,  _angle_bf_output_deg.z*10, _state._pan_angle_min*0.1f, _state._pan_angle_max*0.1f);
 	
-	gcs().send_text(MAV_SEVERITY_INFO, "Auto Mount load");
+	//gcs().send_text(MAV_SEVERITY_INFO, "Auto Mount load");
 }
 
+// private methods
 // set_mode - sets mount's mode
-void AP_Auto_Servo::set_mode(enum MAV_MOUNT_MODE mode)
+void AP_Mount_Auto_Servo::set_mode(enum MAV_MOUNT_MODE mode)
 {
     // record the mode change and return success
     _state._mode = mode;
 }
 
-// private methods
-
 // check_servo_map - detects which axis we control using the functions assigned to the servos in the RC_Channel_aux
 //  should be called periodically (i.e. 1hz or less)
-void AP_Auto_Servo::check_servo_map()
+void AP_Mount_Auto_Servo::check_servo_map()
 {
     _flags.roll_control = SRV_Channels::function_assigned(_roll_idx);
     _flags.tilt_control = SRV_Channels::function_assigned(_tilt_idx);
     _flags.pan_control = SRV_Channels::function_assigned(_pan_idx);
 }
-
 // send_mount_status - called to allow mounts to send their status to GCS using the MOUNT_STATUS message
-void AP_Auto_Servo::send_mount_status(mavlink_channel_t chan)
+void AP_Mount_Auto_Servo::send_mount_status(mavlink_channel_t chan)
 {
     mavlink_msg_mount_status_send(chan, 0, 0, _angle_bf_output_deg.y*100, _angle_bf_output_deg.x*100, _angle_bf_output_deg.z*100);
 }
@@ -74,7 +71,7 @@ void AP_Auto_Servo::send_mount_status(mavlink_channel_t chan)
 // stabilize - stabilizes the mount relative to the Earth's frame
 //  input: _angle_ef_target_rad (earth frame targets in radians)
 //  output: _angle_bf_output_deg (body frame angles in degrees)
-void AP_Auto_Servo::stabilize()
+void AP_Mount_Auto_Servo::stabilize()
 {
     AP_AHRS &ahrs = AP::ahrs();
     // only do the full 3D frame transform if we are doing pan control
@@ -103,7 +100,7 @@ void AP_Auto_Servo::stabilize()
 
 
 // closest_limit - returns closest angle to 'angle' taking into account limits.  all angles are in degrees * 10
-int16_t AP_Auto_Servo::closest_limit(int16_t angle, int16_t angle_min, int16_t angle_max)
+int16_t AP_Mount_Auto_Servo::closest_limit(int16_t angle, int16_t angle_min, int16_t angle_max)
 {
     // Make sure the angle lies in the interval [-180 .. 180[ degrees
     while (angle < -1800) angle += 3600;
@@ -129,7 +126,7 @@ int16_t AP_Auto_Servo::closest_limit(int16_t angle, int16_t angle_min, int16_t a
 }
 
 // move_servo - moves servo with the given id to the specified angle.  all angles are in degrees * 10
-void AP_Auto_Servo::move_servo(uint8_t function_idx, int16_t angle, int16_t angle_min, int16_t angle_max)
+void AP_Mount_Auto_Servo::move_servo(uint8_t function_idx, int16_t angle, int16_t angle_min, int16_t angle_max)
 {
 	// saturate to the closest angle limit if outside of [min max] angle interval
 	int16_t servo_out = closest_limit(angle, angle_min, angle_max);

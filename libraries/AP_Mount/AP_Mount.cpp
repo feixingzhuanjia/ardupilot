@@ -7,6 +7,7 @@
 #include "AP_Mount_Alexmos.h"
 #include "AP_Mount_SToRM32.h"
 #include "AP_Mount_SToRM32_serial.h"
+#include "AP_Auto_Servo.h"
 
 const AP_Param::GroupInfo AP_Mount::var_info[] = {
     // @Param: _DEFLT_MODE
@@ -94,7 +95,7 @@ const AP_Param::GroupInfo AP_Mount::var_info[] = {
     // @Description: 0 for none, any other for the RC channel to be used to control roll movements
     // @Values: 0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8,9:RC9,10:RC10,11:RC11,12:RC12
     // @User: Standard
-    AP_GROUPINFO("_RC_IN_ROLL",  7, AP_Mount, state[0]._roll_rc_in, 12),
+    AP_GROUPINFO("_RC_IN_ROLL",  7, AP_Mount, state[0]._roll_rc_in, 0),
 
     // @Param: _ANGMIN_ROL
     // @DisplayName: Minimum roll angle
@@ -420,7 +421,7 @@ void AP_Mount::init()
         if (SRV_Channels::function_assigned(SRV_Channel::Aux_servo_function_t::k_mount_pan) ||
             SRV_Channels::function_assigned(SRV_Channel::Aux_servo_function_t::k_mount_tilt) ||
             SRV_Channels::function_assigned(SRV_Channel::Aux_servo_function_t::k_mount_roll)) {
-                state[0]._type.set_and_save(Mount_Type_Servo);
+                state[0]._type.set_and_save(Mount_Type_Auto_Servo);
         }
     }
 
@@ -461,6 +462,10 @@ void AP_Mount::init()
         // check for SToRM32 mounts using serial protocol
         } else if (mount_type == Mount_Type_SToRM32_serial) {
             _backends[instance] = new AP_Mount_SToRM32_serial(*this, state[instance], instance);
+            _num_instances++;
+
+		} else if (mount_type == Mount_Type_Auto_Servo) {
+            _backends[instance] = new AP_Mount_Auto_Servo(*this, state[instance], instance);
             _num_instances++;
         }
 

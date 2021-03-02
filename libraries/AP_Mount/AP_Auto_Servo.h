@@ -10,11 +10,11 @@
 #include <SRV_Channel/SRV_Channel.h>
 #include "AP_Mount_Backend.h"
 
-class AP_Auto_Servo : public AP_Mount_Backend
+class AP_Mount_Auto_Servo : public AP_Mount_Backend
 {
 public:
     // Constructor
-    AP_Auto_Servo(AP_Mount &frontend, AP_Mount::mount_state &state, uint8_t instance):
+    AP_Mount_Auto_Servo(AP_Mount &frontend, AP_Mount::mount_state &state, uint8_t instance):
         AP_Mount_Backend(frontend, state, instance),
         _roll_idx(SRV_Channel::k_none),
         _tilt_idx(SRV_Channel::k_none),
