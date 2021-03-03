@@ -1,8 +1,8 @@
----- _tilt_angle_max Matches (7 in 5 files) ----
-AP_Auto_Servo.cpp (e:\ardupilot\libraries\ap_mount):    move_servo(_tilt_idx, _angle_bf_output_deg.y*10, _state._tilt_angle_min*0.1f, _state._tilt_angle_max*0.1f);
-AP_Mount.cpp (e:\ardupilot\libraries\ap_mount):    AP_GROUPINFO("_ANGMAX_TIL", 12, AP_Mount, state[0]._tilt_angle_max, 4500),
-AP_Mount.cpp (e:\ardupilot\libraries\ap_mount):    AP_GROUPINFO("2_ANGMAX_TIL",    36, AP_Mount, state[1]._tilt_angle_max, 4500),
-AP_Mount.h (e:\ardupilot\libraries\ap_mount):        AP_Int16        _tilt_angle_max;    // max tilt in 0.01 degree units
-AP_Mount_Backend.cpp (e:\ardupilot\libraries\ap_mount):                       _state._tilt_angle_max);
-AP_Mount_Backend.cpp (e:\ardupilot\libraries\ap_mount):            _angle_ef_target_rad.y = angle_input_rad(tilt_ch, _state._tilt_angle_min, _state._tilt_angle_max);
-AP_Mount_Servo.cpp (e:\ardupilot\libraries\ap_mount):    move_servo(_tilt_idx, _angle_bf_output_deg.y*10, _state._tilt_angle_min*0.1f, _state._tilt_angle_max*0.1f);
+---- _state._mode Matches (7 in 7 files) ----
+AP_Auto_Servo.cpp (libraries\ap_mount):    _state._mode = mode;
+AP_Mount_Alexmos.cpp (libraries\ap_mount):    _state._mode = mode;
+AP_Mount_Backend.cpp (libraries\ap_mount):    control((int32_t)packet.input_a, (int32_t)packet.input_b, (int32_t)packet.input_c, _state._mode);
+AP_Mount_Servo.cpp (libraries\ap_mount):    _state._mode = mode;
+AP_Mount_SoloGimbal.cpp (libraries\ap_mount):    _state._mode = mode;
+AP_Mount_SToRM32.cpp (libraries\ap_mount):    _state._mode = mode;
+AP_Mount_SToRM32_serial.cpp (libraries\ap_mount):    _state._mode = mode;

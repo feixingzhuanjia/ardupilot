@@ -43,10 +43,9 @@ void AP_Mount_Auto_Servo::update()
     move_servo(_tilt_idx, _angle_bf_output_deg.y*10, _state._tilt_angle_min*0.1f, _state._tilt_angle_max*0.1f);
     move_servo(_pan_idx,  _angle_bf_output_deg.z*10, _state._pan_angle_min*0.1f, _state._pan_angle_max*0.1f);
 	
-	//gcs().send_text(MAV_SEVERITY_INFO, "Auto Mount load");
+	gcs().send_text(MAV_SEVERITY_INFO, "Auto Mount load");
 }
 
-// private methods
 // set_mode - sets mount's mode
 void AP_Mount_Auto_Servo::set_mode(enum MAV_MOUNT_MODE mode)
 {
@@ -62,6 +61,7 @@ void AP_Mount_Auto_Servo::check_servo_map()
     _flags.tilt_control = SRV_Channels::function_assigned(_tilt_idx);
     _flags.pan_control = SRV_Channels::function_assigned(_pan_idx);
 }
+
 // send_mount_status - called to allow mounts to send their status to GCS using the MOUNT_STATUS message
 void AP_Mount_Auto_Servo::send_mount_status(mavlink_channel_t chan)
 {
@@ -77,26 +77,26 @@ void AP_Mount_Auto_Servo::stabilize()
     // only do the full 3D frame transform if we are doing pan control
    
 
-        _angle_bf_output_deg.z = degrees(_angle_ef_target_rad.z);       
-        _angle_bf_output_deg.x = degrees(ahrs.roll);
-        _angle_bf_output_deg.y = degrees(ahrs.pitch);
+    _angle_bf_output_deg.z = degrees(_angle_ef_target_rad.z);       
+    _angle_bf_output_deg.x = degrees(ahrs.roll);
+    _angle_bf_output_deg.y = degrees(ahrs.pitch);
         
 
-        // lead filter
-        const Vector3f &gyro = ahrs.get_gyro();
+    // lead filter
+    const Vector3f &gyro = ahrs.get_gyro();
 
-        if (_state._stab_roll && !is_zero(_state._roll_stb_lead) && fabsf(ahrs.pitch) < M_PI/3.0f) {
-            // Compute rate of change of euler roll angle
-            float roll_rate = gyro.x + (ahrs.sin_pitch() / ahrs.cos_pitch()) * (gyro.y * ahrs.sin_roll() + gyro.z * ahrs.cos_roll());
-            _angle_bf_output_deg.x -= degrees(roll_rate) * _state._roll_stb_lead;
-        }
-
-        if (_state._stab_tilt && !is_zero(_state._pitch_stb_lead)) {
-            // Compute rate of change of euler pitch angle
-            float pitch_rate = ahrs.cos_pitch() * gyro.y - ahrs.sin_roll() * gyro.z;
-            _angle_bf_output_deg.y -= degrees(pitch_rate) * _state._pitch_stb_lead;
-        }
+    if (_state._stab_roll && !is_zero(_state._roll_stb_lead) && fabsf(ahrs.pitch) < M_PI/3.0f) {
+        // Compute rate of change of euler roll angle
+        float roll_rate = gyro.x + (ahrs.sin_pitch() / ahrs.cos_pitch()) * (gyro.y * ahrs.sin_roll() + gyro.z * ahrs.cos_roll());
+        _angle_bf_output_deg.x -= degrees(roll_rate) * _state._roll_stb_lead;
     }
+
+    if (_state._stab_tilt && !is_zero(_state._pitch_stb_lead)) {
+        // Compute rate of change of euler pitch angle
+        float pitch_rate = ahrs.cos_pitch() * gyro.y - ahrs.sin_roll() * gyro.z;
+        _angle_bf_output_deg.y -= degrees(pitch_rate) * _state._pitch_stb_lead;
+    }
+}
 
 
 // closest_limit - returns closest angle to 'angle' taking into account limits.  all angles are in degrees * 10
