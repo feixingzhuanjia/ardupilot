@@ -90,7 +90,7 @@ const AP_Param::GroupInfo AP_TECS::var_info[] = {
     AP_GROUPINFO("RLL2THR",  8, AP_TECS, _rollComp, 10.0f),
 
     // @Param: SPDWEIGHT
-    // @DisplayName: Weighting applied to speed control
+    // @DisplayName: Weighting applied to speed control我的理解就是设置成不同模式俯仰和油门控制的东西不同，主要该改变的是其输入量不同导致其输出不同
     // @Description: Mixing of pitch and throttle correction for height and airspeed errors. Pitch controls altitude and throttle controls airspeed if set to 0. Pitch controls airspeed and throttle controls altitude if set to 2 (good for gliders). Blended if set to 1.
     // @Range: 0.0 2.0
     // @Increment: 0.1
@@ -558,15 +558,15 @@ void AP_TECS::_detect_underspeed(void)
 
 void AP_TECS::_update_energies(void)
 {
-    // Calculate specific energy demands
-    _SPE_dem = _hgt_dem_adj * GRAVITY_MSS;
-    _SKE_dem = 0.5f * _TAS_dem_adj * _TAS_dem_adj;
+    // Calculate specific energy demands计算特定能源需求
+    _SPE_dem = _hgt_dem_adj * GRAVITY_MSS;//要求spe=高度要求调整*g
+    _SKE_dem = 0.5f * _TAS_dem_adj * _TAS_dem_adj;//1/2v2；v是限速后的速度需求//这是TECS控制回路跟踪的需求
 
-    // Calculate specific energy rate demands
+    // Calculate specific energy rate demands计算特定能源率需求
     _SPEdot_dem = _hgt_rate_dem * GRAVITY_MSS;
     _SKEdot_dem = _TAS_state * _TAS_rate_dem;
 
-    // Calculate specific energy
+    // Calculate specific energy计算现在能源
     _SPE_est = _height * GRAVITY_MSS;
     _SKE_est = 0.5f * _TAS_state * _TAS_state;
 
@@ -612,13 +612,13 @@ void AP_TECS::_update_throttle_with_airspeed(void)
     }
     
     // Calculate total energy error
-    _STE_error = constrain_float((_SPE_dem - _SPE_est), SPE_err_min, SPE_err_max) + _SKE_dem - _SKE_est;
-    float STEdot_dem = constrain_float((_SPEdot_dem + _SKEdot_dem), _STEdot_min, _STEdot_max);
-    float STEdot_error = STEdot_dem - _SPEdot - _SKEdot;
+    _STE_error = constrain_float((_SPE_dem - _SPE_est), SPE_err_min, SPE_err_max) + _SKE_dem - _SKE_est;//总能量误差量（理想值减去当前值）
+    float STEdot_dem = constrain_float((_SPEdot_dem + _SKEdot_dem), _STEdot_min, _STEdot_max);//总比能
+    float STEdot_error = STEdot_dem - _SPEdot - _SKEdot;//总比能误差量（理想的减当前的）
 
     // Apply 0.5 second first order filter to STEdot_error
     // This is required to remove accelerometer noise from the  measurement
-    STEdot_error = 0.2f*STEdot_error + 0.8f*_STEdotErrLast;
+    STEdot_error = 0.2f*STEdot_error + 0.8f*_STEdotErrLast;//滤波
     _STEdotErrLast = STEdot_error;
 
     // Calculate throttle demand
@@ -629,35 +629,35 @@ void AP_TECS::_update_throttle_with_airspeed(void)
     }
     else
     {
-        // Calculate gain scaler from specific energy error to throttle
+        // Calculate gain scaler from specific energy error to throttle计算油门的范围/总比能范围，类似于归一化
         // (_STEdot_max - _STEdot_min) / (_THRmaxf - _THRminf) is the derivative of STEdot wrt throttle measured across the max allowed throttle range.
         float K_STE2Thr = 1 / (timeConstant() * (_STEdot_max - _STEdot_min) / (_THRmaxf - _THRminf));
 
-        // Calculate feed-forward throttle
+        // Calculate feed-forward throttle计算前馈油门
         float ff_throttle = 0;
-        float nomThr = aparm.throttle_cruise * 0.01f;
-        const Matrix3f &rotMat = _ahrs.get_rotation_body_to_ned();
+        float nomThr = aparm.throttle_cruise * 0.01f;//0.45正常油门量
+        const Matrix3f &rotMat = _ahrs.get_rotation_body_to_ned();//返回表示当前姿态的DCM旋转矩阵
         // Use the demanded rate of change of total energy as the feed-forward demand, but add
         // additional component which scales with (1/cos(bank angle) - 1) to compensate for induced
         // drag increase during turns.
-        float cosPhi = sqrtf((rotMat.a.y*rotMat.a.y) + (rotMat.b.y*rotMat.b.y));
-        STEdot_dem = STEdot_dem + _rollComp * (1.0f/constrain_float(cosPhi * cosPhi , 0.1f, 1.0f) - 1.0f);
-        ff_throttle = nomThr + STEdot_dem / (_STEdot_max - _STEdot_min) * (_THRmaxf - _THRminf);
+        float cosPhi = sqrtf((rotMat.a.y*rotMat.a.y) + (rotMat.b.y*rotMat.b.y));//包含矩阵行的向量 a行和b行
+        STEdot_dem = STEdot_dem + _rollComp * (1.0f/constrain_float(cosPhi * cosPhi , 0.1f, 1.0f) - 1.0f);//总能量加roll转换补偿
+        ff_throttle = nomThr + STEdot_dem / (_STEdot_max - _STEdot_min) * (_THRmaxf - _THRminf);//把能量归一化到油门量级，并加到油门输出
 
-        // Calculate PD + FF throttle
-        float throttle_damp = _thrDamp;
-        if (_flags.is_doing_auto_land && !is_zero(_land_throttle_damp)) {
-            throttle_damp = _land_throttle_damp;
-        }
+        // Calculate PD + FF throttle，说白了throttle_damp就是改变P的参数大小的一个变量（整的神神秘秘的，哈哈）
+        float throttle_damp = _thrDamp;//油门需求回路的阻尼增益。减慢油门响应以校正速度和高度振荡。
+        if (_flags.is_doing_auto_land && !is_zero(_land_throttle_damp)) {//默认为0，故不作用
+            throttle_damp = _land_throttle_damp;//与TECS THR REAM相同，但仅在自动着陆时有效。增加阻尼以校正速度和高度的振荡。当设置为0时，着陆油门阻尼由TECS控制。
+        }//油门期望值=（整体能量偏差+整体偏差率*阻尼系数（使其变成同一量纲））*归一化参数（使其变成油门量纲）
         _throttle_dem = (_STE_error + STEdot_error * throttle_damp) * K_STE2Thr + ff_throttle;
 
-        // Constrain throttle demand
+        // Constrain throttle demand限幅
         _throttle_dem = constrain_float(_throttle_dem, _THRminf, _THRmaxf);
 
         float THRminf_clipped_to_zero = constrain_float(_THRminf, 0, _THRmaxf);
 
         // Rate limit PD + FF throttle
-        // Calculate the throttle increment from the specified slew time
+        // Calculate the throttle increment from the specified slew time从指定的回转时间计算油门增量
         if (aparm.throttle_slewrate != 0) {
             float thrRateIncr = _DT * (_THRmaxf - THRminf_clipped_to_zero) * aparm.throttle_slewrate * 0.01f;
 
@@ -667,23 +667,23 @@ void AP_TECS::_update_throttle_with_airspeed(void)
             _last_throttle_dem = _throttle_dem;
         }
 
-        // Calculate integrator state upper and lower limits
+        // Calculate integrator state upper and lower limits计算积分器状态上限和下限
         // Set to a value that will allow 0.1 (10%) throttle saturation to allow for noise on the demand
         // Additionally constrain the integrator state amplitude so that the integrator comes off limits faster.
         float maxAmp = 0.5f*(_THRmaxf - THRminf_clipped_to_zero);
-        float integ_max = constrain_float((_THRmaxf - _throttle_dem + 0.1f),-maxAmp,maxAmp);
+        float integ_max = constrain_float((_THRmaxf - _throttle_dem + 0.1f),-maxAmp,maxAmp);//0.1为噪声预留量
         float integ_min = constrain_float((_THRminf - _throttle_dem - 0.1f),-maxAmp,maxAmp);
 
-        // Calculate integrator state, constraining state
-        // Set integrator to a max throttle value during climbout
-        _integTHR_state = _integTHR_state + (_STE_error * _get_i_gain()) * _DT * K_STE2Thr;
+        // Calculate integrator state, constraining state计算积分器状态，约束状态
+        // Set integrator to a max throttle value during climbout爬升期间，将积分器设置为最大油门值
+        _integTHR_state = _integTHR_state + (_STE_error * _get_i_gain()) * _DT * K_STE2Thr;//油门积分器
         if (_flight_stage == AP_Vehicle::FixedWing::FLIGHT_TAKEOFF || _flight_stage == AP_Vehicle::FixedWing::FLIGHT_ABORT_LAND)
         {
             if (!_flags.reached_speed_takeoff) {
                 // ensure we run at full throttle until we reach the target airspeed
                 _throttle_dem = MAX(_throttle_dem, _THRmaxf - _integTHR_state);
             }
-            _integTHR_state = integ_max;
+            _integTHR_state = integ_max;//此阶段积分不作用？
         }
         else
         {
@@ -778,26 +778,26 @@ void AP_TECS::_detect_bad_descent(void)
 
 void AP_TECS::_update_pitch(void)
 {
-    // Calculate Speed/Height Control Weighting
+    // Calculate Speed/Height Control Weighting计算速度和高度之前的权重，其中_spdWeight为权重优先级设定
     // This is used to determine how the pitch control prioritises speed and height control
     // A weighting of 1 provides equal priority (this is the normal mode of operation)
     // A SKE_weighting of 0 provides 100% priority to height control. This is used when no airspeed measurement is available
     // A SKE_weighting of 2 provides 100% priority to speed control. This is used when an underspeed condition is detected. In this instance, if airspeed
     // rises above the demanded value, the pitch angle will be increased by the TECS controller.
     float SKE_weighting = constrain_float(_spdWeight, 0.0f, 2.0f);
-    if (!_ahrs.airspeed_sensor_enabled()) {
+    if (!_ahrs.airspeed_sensor_enabled()) {//空速计未使能直接设置高度优先百分百，即_spdWeight为0；
         SKE_weighting = 0.0f;
-    } else if (_flight_stage == AP_Vehicle::FixedWing::FLIGHT_VTOL) {
+    } else if (_flight_stage == AP_Vehicle::FixedWing::FLIGHT_VTOL) {//垂直起降也就不考虑速度，只考虑高度
         // if we are in VTOL mode then control pitch without regard to
         // speed. Speed is also taken care of independently of
         // height. This is needed as the usual relationship of speed
         // and height is broken by the VTOL motors
         SKE_weighting = 0.0f;        
-    } else if ( _flags.underspeed || _flight_stage == AP_Vehicle::FixedWing::FLIGHT_TAKEOFF || _flight_stage == AP_Vehicle::FixedWing::FLIGHT_ABORT_LAND) {
+    } else if ( _flags.underspeed || _flight_stage == AP_Vehicle::FixedWing::FLIGHT_TAKEOFF || _flight_stage == AP_Vehicle::FixedWing::FLIGHT_ABORT_LAND) {//欠速或者起飞降落时
         SKE_weighting = 2.0f;
-    } else if (_flags.is_doing_auto_land) {
+    } else if (_flags.is_doing_auto_land) {//当飞机处于自动模式并执行着陆任务时为真
         if (_spdWeightLand < 0) {
-            // use sliding scale from normal weight down to zero at landing
+            // use sliding scale from normal weight down to zero at landing着陆时使用从正常权重到零的滑动变化范围
             float scaled_weight = _spdWeight * (1.0f - constrain_float(_path_proportion,0,1));
             SKE_weighting = constrain_float(scaled_weight, 0.0f, 2.0f);
         } else {

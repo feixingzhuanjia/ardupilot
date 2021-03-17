@@ -42,37 +42,37 @@ void ExtendedKalmanFilter::update(float z, float Vx, float Vy)
     X[3] -= Vy;
 
     // LINE 33
-    // Update the covariance matrix
+    // Update the covariance matrix更新协方差矩阵
     // P = A*ekf.P*A'+ekf.Q;
     // We know A is identity so
     // P = ekf.P+ekf.Q;
-    P += Q;
+    P += Q;                                               //公式4
 
     // What measurement do we expect to receive in the estimated
     // state
     // LINE 37
-    // [z1,H] = ekf.jacobian_h(x1);
+    // [z1,H] = ekf.jacobian_h(x1);                        雅可比矩阵分别对f和H 求微分将其线性化 公式2、5
     float z1 = measurementpredandjacobian(H);
 
     // LINE 40
     // P12 = P * H';
-    P12.mult(P, H); //cross covariance 
+    P12.mult(P, H); //cross covariance   互协方差
     
     // LINE 41
     // Calculate the KALMAN GAIN
     // K = P12 * inv(H*P12 + ekf.R);                     %Kalman filter gain
-    K = P12 * 1.0 / (H * P12 + R);
+    K = P12 * 1.0 / (H * P12 + R);                        //公式6
 
     // Correct the state estimate using the measurement residual.
     // LINE 44
     // X = x1 + K * (z - z1);
-    X += K * (z - z1);
+    X += K * (z - z1);                                     //公式7
 
     // Correct the covariance too.
     // LINE 46
     // NB should be altered to reflect Stengel
     // P = P_predict - K * P12';
-    tempM.mult(K, P12);
+    tempM.mult(K, P12);                                   ///公式8
     P -= tempM;
     
     P.force_symmetry();

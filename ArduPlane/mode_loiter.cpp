@@ -3,9 +3,9 @@
 
 bool ModeLoiter::_enter()
 {
-    plane.throttle_allows_nudging = true;
-    plane.auto_throttle_mode = true;
-    plane.auto_navigation_mode = true;
+    plane.throttle_allows_nudging = true;//运行依靠空速来混合RC输入和油门
+    plane.auto_throttle_mode = true;//需要运行速度高度控制器，（对下面更新pitch角作铺垫）
+    plane.auto_navigation_mode = true;//需要运行自动导航控制器，（对下方更新roll角作铺垫）
     plane.do_loiter_at_location();
 
 #if SOARING_ENABLED == ENABLED

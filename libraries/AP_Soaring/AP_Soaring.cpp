@@ -154,13 +154,13 @@ bool SoaringController::suppress_throttle()
         // Time to throttle up
         _throttle_suppressed = false;
     } else if ((!_throttle_suppressed) && (alt > alt_cutoff)) {
-        // Start glide
+        // Start glide开始滑翔
         _throttle_suppressed = true;
         // Zero the pitch integrator - the nose is currently raised to climb, we need to go back to glide.
-        _spdHgt.reset_pitch_I();
+        _spdHgt.reset_pitch_I();//机头目前正在上升，我们需要回去滑翔
         _cruise_start_time_us = AP_HAL::micros64();
         // Reset the filtered vario rate - it is currently elevated due to the climb rate and would otherwise take a while to fall again,
-        // leading to false positives.
+        // leading to false positives.重置过滤后下沉率
         _vario.filtered_reading = 0;
     }
 
@@ -178,10 +178,12 @@ bool SoaringController::check_thermal_criteria()
 
 bool SoaringController::check_cruise_criteria()
 {
-    float thermalability = (_ekf.X[0]*expf(-powf(_loiter_rad / _ekf.X[1], 2))) - EXPECTED_THERMALLING_SINK;
+    float thermalability = (_ekf.X[0]*expf(-powf(_loiter_rad / _ekf.X[1], 2))) - EXPECTED_THERMALLING_SINK;//loiter_rad由soar——control供给  W*e指数（盘旋半径平方/热气流半径平方）-sink
     float alt = _vario.alt;
-
-    if (soar_active && (AP_HAL::micros64() - _thermal_start_time_us) > ((unsigned)min_thermal_s * 1e6) && thermalability < McCready(alt)) {
+                                          /*
+                                           * 此处代码有漏洞，_thermal_start_time_us只在初始化时赋值了，后来一直不变会影响该条件的使用
+                                           */
+    if (soar_active && (AP_HAL::micros64() - _thermal_start_time_us) > ((unsigned)min_thermal_s * 1e6) && thermalability < McCready(alt)) {//与SOAR_vspeed（0.7）阈值比较，小于阈值即推出
         gcs().send_text(MAV_SEVERITY_INFO, "Thermal weak, recommend quitting: W %f R %f th %f alt %f Mc %f", (double)_ekf.X[0], (double)_ekf.X[1], (double)thermalability, (double)alt, (double)McCready(alt));
         return true;
     } else if (soar_active && (alt>alt_max || alt<alt_min)) {
@@ -236,7 +238,7 @@ void SoaringController::init_cruising()
         _throttle_suppressed = true;
     }
 }
-
+//获得风修正漂移
 void SoaringController::get_wind_corrected_drift(const Location *current_loc, const Vector3f *wind, float *wind_drift_x, float *wind_drift_y, float *dx, float *dy)
 {
     const Vector2f diff = _prev_update_location.get_distance_NE(*current_loc); // get distances from previous update
@@ -265,8 +267,8 @@ void SoaringController::update_thermalling()
         float dy = 0;
         float dx_w = 0;
         float dy_w = 0;
-        Vector3f wind = _ahrs.wind_estimate();
-        get_wind_corrected_drift(&current_loc, &wind, &dx_w, &dy_w, &dx, &dy);
+        Vector3f wind = _ahrs.wind_estimate();//风速估计
+        get_wind_corrected_drift(&current_loc, &wind, &dx_w, &dy_w, &dx, &dy);//估计新位置偏移dx=⊿xabs-vwind
 
 #if (0)
         // Print32_t filter info for debugging
@@ -296,7 +298,7 @@ void SoaringController::update_thermalling()
                                                (double)dy_w);
 
         //log_data();
-        _ekf.update(_vario.reading,dx, dy);       // update the filter
+        _ekf.update(_vario.reading,dx, dy);       // update the filter卡尔曼滤波
 
         _prev_update_location = current_loc;      // save for next time
         _prev_update_time = AP_HAL::micros64();
@@ -328,9 +330,9 @@ bool SoaringController::is_active() const
         return false;
     }
     if (soar_active_ch <= 0) {
-        // no activation channel
-        return true;
+        // no activation channel是不是写错了？难道说明这个是不需要手动控制的模式？
+        return true;//应该是假吧
     }
-    // active when above 1700
+    // active when above 1700，而这个是手动模式的要求？
     return RC_Channels::get_radio_in(soar_active_ch-1) >= 1700;
 }

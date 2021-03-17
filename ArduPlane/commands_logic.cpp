@@ -888,7 +888,7 @@ bool Plane::verify_within_distance()
 
 void Plane::do_loiter_at_location()
 {
-    if (aparm.loiter_radius < 0) {
+    if (aparm.loiter_radius < 0) {//1为顺时针，-1表示逆时针
         loiter.direction = -1;
     } else {
         loiter.direction = 1;
